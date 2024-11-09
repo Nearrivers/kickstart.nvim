@@ -9,18 +9,18 @@ harpoon:setup {}
 
 vim.keymap.set('n', '<leader>a', function()
   harpoon:list():add()
-end)
+end, { desc = 'Harpoon: Add file' })
 
 vim.keymap.set('n', '<C-e>', function()
   harpoon.ui:toggle_quick_menu(harpoon:list())
-end)
+end, { desc = 'Harpoon: List files' })
 
 vim.keymap.set('n', '<leader>p', function()
   harpoon:list():prev()
-end)
+end, { desc = 'Harpoon: [P]revious file' })
 
 vim.keymap.set('n', '<leader>n', function()
   harpoon:list():next()
-end)
+end, { desc = 'Harpoon: [N]ext file' })
 
 return {}
