@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -205,6 +205,10 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
+vim.keymap.set('n', '<C-d>', '<C-d>zz')
+vim.keymap.set('n', '<C-u>', '<C-u>zz')
+vim.keymap.set('n', '<C-u>', '<C-f>zz')
+vim.keymap.set('n', '<C-b>', '<C-b>zz')
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -371,6 +375,30 @@ require('lazy').setup({
         }
       end,
     },
+=======
+    config = function() -- This is the function that runs, AFTER loading
+      local wk = require 'which-key'
+
+      wk.add {
+        { '<leader>c', group = '[C]ode' },
+        { '<leader>c_', hidden = true },
+        { '<leader>d', group = '[D]ocument' },
+        { '<leader>d_', hidden = true },
+        { '<leader>r', group = '[R]ename' },
+        { '<leader>r_', hidden = true },
+        { '<leader>s', group = '[S]earch' },
+        { '<leader>s_', hidden = true },
+        { '<leader>w', group = '[W]orkspace' },
+        { '<leader>w_', hidden = true },
+        { '<leader>t', group = '[T]oggle' },
+        { '<leader>t_', hidden = true },
+        { '<leader>h', group = 'Git [H]unk' },
+        { '<leader>h_', hidden = true },
+        { '<leader>h', desc = 'Git [H]unk', mode = 'v' },
+      }
+
+      wk.setup()
+    end,
   },
   -- NOTE: Plugins can specify dependencies.
   --
@@ -378,7 +406,6 @@ require('lazy').setup({
   -- you do for a plugin at the top level, you can do for a dependency.
   --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
-
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
@@ -784,6 +811,7 @@ require('lazy').setup({
         desc = '[F]ormat buffer',
       },
     },
+    event = { 'BufReadPre', 'BufNewFile' },
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
@@ -799,12 +827,15 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        javascript = { { 'prettierd', 'prettier' } },
+        javascriptreact = { 'prettier' },
+        typescriptreact = { 'prettier' },
+        javascript = { 'prettier' },
+        typescript = { 'prettier' },
         go = { 'gofmt' },
+        vue = { 'prettier' },
       },
     },
   },
-
   { -- Autocompletion
     'saghen/blink.cmp',
     event = 'VimEnter',
@@ -902,13 +933,29 @@ require('lazy').setup({
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
     },
+  {
+    'neanias/everforest-nvim',
+    version = false,
+    lazy = false,
+    priority = 1000, -- make sure to load this before all the other start plugins
+    -- Optional; default configuration will be used if setup isn't called.
+    config = function()
+      require('everforest').setup {
+        transparent_background = true,
+      }
+    end,
   },
-
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  {
+    'folke/tokyonight.nvim',
+    lazy = false,
+    priority = 1000,
+    init = function()
+      require('tokyonight').setup {
+        transparent_background = true,
+      }
+    end,
+  },
+  {
     'catppuccin/nvim',
     name = 'catppuccin-macchiato',
     priority = 1000, -- Make sure to load this before all the other start plugins.
@@ -917,9 +964,12 @@ require('lazy').setup({
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       vim.cmd.colorscheme 'catppuccin-macchiato'
+    init = function()
+      require('catppuccin').setup {
+        transparent_background = true, -- disables setting the background color.
+      }
 
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
+      vim.cmd.colorscheme 'catppuccin-macchiato'
     end,
   },
 
@@ -934,6 +984,7 @@ require('lazy').setup({
       -- Examples:
       --  - va)  - [V]isually select [A]round [)]paren
       --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
+      --  - yin' - [Y]ank [I]nside [N]ext [']quote
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
 
@@ -942,22 +993,11 @@ require('lazy').setup({
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
+      -- Pour ne pas insérer l'espace une fois le caractère ajouté, utiliser
+      -- la version "fermante" de ce dernier. Ex: saiw( va ajouter les parenthèses
+      -- ET 2 espaces entre le mot alors que saiw) ne va ajouter qu'
+      -- )
       require('mini.surround').setup()
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
@@ -1009,8 +1049,7 @@ require('lazy').setup({
   --    This is the easiest way to modularize your config.
   --
   { 'nvim-neotest/nvim-nio' },
-  -- Fermeture auto des symbole
-  -- config = function()
+  -- Fermeture auto des symboles
   { 'm4xshen/autoclose.nvim', opts = {} },
   -- Harpoon
   {
@@ -1018,45 +1057,11 @@ require('lazy').setup({
     branch = 'harpoon2',
     dependencies = { 'nvim-lua/plenary.nvim' },
   },
-  --[[ {
-    'kylechui/nvim-surround',
-    config = function()
-      require('nvim-surround').setup {
-        -- Configuration here, or leave empty to use defaults
-      }
-    end,
-  }, ]]
   {
     'goolord/alpha-nvim',
     config = function()
       require('alpha').setup(require('alpha.themes.dashboard').config)
     end,
-  },
-  {
-    'akinsho/flutter-tools.nvim',
-    lazy = false,
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'stevearc/dressing.nvim', -- optional for vim.ui.select
-    },
-    config = true,
-  },
-  {
-    'rcarriga/nvim-notify',
-  },
-  {
-    'folke/noice.nvim',
-    event = 'VeryLazy',
-    opts = {
-      -- add any options here
-    },
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      'MunifTanjim/nui.nvim',
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-    },
   },
   {
     'olexsmir/gopher.nvim',
@@ -1068,7 +1073,6 @@ require('lazy').setup({
       vim.cmd [[silent! GoInstallDeps]]
     end,
   },
-  { 'xiyaowong/transparent.nvim' },
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   { import = 'custom.plugins' },
