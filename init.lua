@@ -352,41 +352,6 @@ require('lazy').setup({
       },
     },
   },
-  {
-    'neanias/everforest-nvim',
-    version = false,
-    lazy = false,
-    priority = 1000, -- make sure to load this before all the other start plugins
-    -- Optional; default configuration will be used if setup isn't called.
-    config = function()
-      require('everforest').setup {
-        transparent_background = true,
-      }
-    end,
-  },
-  {
-    'folke/tokyonight.nvim',
-    lazy = false,
-    priority = 1000,
-    init = function()
-      require('tokyonight').setup {
-        transparent_background = true,
-      }
-    end,
-  },
-  {
-    'catppuccin/nvim',
-    name = 'catppuccin-macchiato',
-    priority = 1000, -- make sure to load this before all the other start plugins.
-    init = function()
-      require('catppuccin').setup {
-        transparent_background = true, -- disables setting the background color.
-      }
-
-      vim.cmd.colorscheme 'catppuccin-macchiato'
-    end,
-  },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -464,6 +429,7 @@ require('lazy').setup({
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   { import = 'custom.plugins' },
+  { import = 'custom.themes' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
