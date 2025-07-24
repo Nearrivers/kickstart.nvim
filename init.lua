@@ -348,34 +348,6 @@ require('lazy').setup({
           F12 = '<F12>',
         },
       },
-      config = function()
-        -- Document existing key chains
-        require('which-key').register {
-          { '<leader>c', group = '[C]ode' },
-          { '<leader>c_', hidden = true },
-          { '<leader>d', group = '[D]ocument' },
-          { '<leader>d_', hidden = true },
-          { '<leader>r', group = '[R]ename' },
-          { '<leader>r_', hidden = true },
-          { '<leader>s', group = '[S]earch' },
-          { '<leader>s_', hidden = true },
-          { '<leader>w', group = '[W]orkspace' },
-          { '<leader>w_', hidden = true },
-          { '<leader>t', group = '[T]oggle' },
-          { '<leader>t_', hidden = true },
-          { '<leader>h', group = 'Git [H]unk' },
-          { '<leader>h_', hidden = true },
-          -- ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-          -- ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-          -- ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-          -- ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-          -- ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-          -- ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-          -- ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
-        }
-      end,
-    },
-=======
     config = function() -- This is the function that runs, AFTER loading
       local wk = require 'which-key'
 
@@ -399,6 +371,7 @@ require('lazy').setup({
 
       wk.setup()
     end,
+    },
   },
   -- NOTE: Plugins can specify dependencies.
   --
@@ -964,6 +937,7 @@ require('lazy').setup({
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       vim.cmd.colorscheme 'catppuccin-macchiato'
+      end,
     init = function()
       require('catppuccin').setup {
         transparent_background = true, -- disables setting the background color.
@@ -972,7 +946,6 @@ require('lazy').setup({
       vim.cmd.colorscheme 'catppuccin-macchiato'
     end,
   },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
@@ -1076,6 +1049,7 @@ require('lazy').setup({
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   { import = 'custom.plugins' },
+  { import = 'custom.themes' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -1096,4 +1070,4 @@ require('lazy').setup({
       lazy = '💤 ',
     },
   },
-})
+}})
