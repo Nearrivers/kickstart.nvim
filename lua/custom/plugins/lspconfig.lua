@@ -113,51 +113,79 @@ return { -- LSP Configuration & Plugins
       end,
     })
 
-    -- LSP servers and clients are able to communicate to each other what features they support.
-    --  By default, Neovim doesn't support everything that is in the LSP specification.
-    --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
-    --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-    -- Enable the following language servers
-    --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-    --
-    --  Add any additional override configuration in the following tables. Available keys are:
-    --  - cmd (table): Override the default command used to start the server
-    --  - filetypes (table): Override the default list of associated filetypes for the server
-    --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-    --  - settings (table): Override the default settings passed when initializing the server.
-    --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+    local vue_ls_path = vim.fn.expand '$MASON/packages/vue-language-server/node_modules/@vue/language-server'
+    local tsserver_filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' }
+    local vue_plugin = {
+      name = '@vue/typescript-plugin',
+      location = vue_ls_path,
+      languages = { 'vue' },
+      configNamespace = 'typescript',
+    }
+
+    local gopls_config = {
+      cmd = { 'gopls' },
+      filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+      settings = {
+        gopls = {
+          completeUnimported = true,
+          staticcheck = true,
+          gofumpt = true,
+          analyses = {
+            unusedparams = true,
+          },
+        },
+      },
+    }
+
+    local ts_ls_config = {
+      filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact' },
+      init_options = {
+        plugins = {
+          vue_plugin,
+        },
+      },
+    }
+
+    local vtsls_config = {
+      settings = {
+        vtsls = {
+          tsserver = {
+            globalPlugins = {
+              vue_plugin,
+            },
+          },
+        },
+      },
+      filetypes = { 'vue' },
+    }
+
+    local luals_config = {
+      settings = {
+        Lua = {
+          completion = {
+            callSnippet = 'Replace',
+          },
+          -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+          diagnostics = { disable = { 'missing-fields' } },
+        },
+      },
+    }
+
+    local emmet_ls = {
+      filetypes = { 'html', 'vue' },
+    }
+
     local servers = {
       -- clangd = {},
-      gopls = {
-        cmd = { 'gopls' },
-        filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
-        settings = {
-          gopls = {
-            completeUnimported = true,
-            staticcheck = true,
-            gofumpt = true,
-            analyses = {
-              unusedparams = true,
-            },
-          },
-        },
-      },
+      gopls = {},
       emmet_ls = {},
       ts_ls = {},
-      lua_ls = {
-        settings = {
-          Lua = {
-            completion = {
-              callSnippet = 'Replace',
-            },
-            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-            diagnostics = { disable = { 'missing-fields' } },
-          },
-        },
-      },
+      vue_ls = {},
+      vtsls = {},
+      lua_ls = {},
     }
 
     -- Ensure the servers and tools above are installed
@@ -175,19 +203,14 @@ return { -- LSP Configuration & Plugins
       'stylua', -- Used to format Lua code
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+    require('mason-lspconfig').setup()
 
-    require('mason-lspconfig').setup {
-      handlers = {
-        function(server_name)
-          local server = servers[server_name] or {}
-          -- This handles overriding only values explicitly passed
-          -- by the server configuration above. Useful when disabling
-          -- certain features of an LSP (for example, turning off formatting for tsserver)
-          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          local lspconfig = require 'lspconfig'
-          lspconfig[server_name].setup(server)
-        end,
-      },
-    }
+    vim.lsp.config('emmet_ls', emmet_ls)
+    vim.lsp.config('vtsls', vtsls_config)
+    vim.lsp.config('vue_ls', {})
+    vim.lsp.config('ts_ls', ts_ls_config)
+    vim.lsp.config('lua_ls', luals_config)
+    vim.lsp.config('gopls', gopls_config)
+    vim.lsp.enable { 'tsls', 'vue_ls' }
   end,
 }

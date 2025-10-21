@@ -5,7 +5,7 @@ return { -- Highlight, edit, and navigate code
     { 'windwp/nvim-ts-autotag' },
   },
   opts = {
-    ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' },
+    ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc', 'vue' },
     -- Autoinstall languages that are not installed
     auto_install = true,
     highlight = {
