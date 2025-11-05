@@ -6,6 +6,6 @@ return {
     require('catppuccin').setup {
       transparent_background = true, -- disables setting the background color.
     }
-    vim.cmd 'colorscheme catppuccin-mocha'
+    -- vim.cmd 'colorscheme catppuccin-mocha'
   end,
 }

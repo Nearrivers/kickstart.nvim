@@ -139,6 +139,10 @@ return { -- Autocompletion
         },
         { name = 'luasnip' },
         { name = 'path' },
+        { name = 'obsidian' },
+        { name = 'obsidian_new' },
+        { name = 'obsidian_tags' },
+        { name = 'buffer' },
       },
     }
   end,
