@@ -802,12 +802,12 @@ require('lazy').setup {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        javascriptreact = { 'prettier' },
-        typescriptreact = { 'prettier' },
-        javascript = { 'prettier' },
-        typescript = { 'prettier' },
+        javascriptreact = { 'prettier', 'biome' },
+        typescriptreact = { 'prettier', 'biome' },
+        javascript = { 'prettier', 'biome' },
+        typescript = { 'prettier', 'biome' },
         go = { 'gofmt' },
-        vue = { 'prettier' },
+        vue = { 'prettier', 'biome' },
       },
     },
   },
@@ -899,46 +899,6 @@ require('lazy').setup {
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
-    },
-    {
-      'neanias/everforest-nvim',
-      version = false,
-      lazy = false,
-      priority = 1000, -- make sure to load this before all the other start plugins
-      -- Optional; default configuration will be used if setup isn't called.
-      config = function()
-        require('everforest').setup {
-          transparent_background = true,
-        }
-      end,
-    },
-    {
-      'folke/tokyonight.nvim',
-      lazy = false,
-      priority = 1000,
-      init = function()
-        require('tokyonight').setup {
-          transparent_background = true,
-        }
-      end,
-    },
-    {
-      'catppuccin/nvim',
-      name = 'catppuccin-macchiato',
-      priority = 1000, -- Make sure to load this before all the other start plugins.
-      config = function()
-        -- Load the colorscheme here.
-        -- Like many other themes, this one has different styles, and you could load
-        -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-        vim.cmd.colorscheme 'catppuccin-macchiato'
-      end,
-      init = function()
-        require('catppuccin').setup {
-          transparent_background = true, -- disables setting the background color.
-        }
-
-        vim.cmd.colorscheme 'catppuccin-macchiato'
-      end,
     },
     -- Highlight todo, notes, etc in comments
     { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },

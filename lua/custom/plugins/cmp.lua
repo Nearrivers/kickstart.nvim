@@ -60,8 +60,14 @@ return { -- Autocompletion
       },
       completion = { completeopt = 'menu,menuone,noinsert' },
       window = {
-        completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
+        completion = {
+          border = 'rounded',
+          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:PmenuSel',
+        },
+        documentation = {
+          border = 'rounded',
+          winhighlight = 'Normal:Normal,FloatBorder:FloatBorder',
+        },
       },
 
       -- For an understanding of why these mappings were
@@ -145,5 +151,8 @@ return { -- Autocompletion
         { name = 'buffer' },
       },
     }
+
+    vim.api.nvim_set_hl(0, 'FloatBorder', { bg = 'NONE' })
+    vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE' })
   end,
 }
