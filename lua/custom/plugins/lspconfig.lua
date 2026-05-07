@@ -1,18 +1,15 @@
 return { -- LSP Configuration & Plugins
   'neovim/nvim-lspconfig',
   dependencies = {
-    -- Automatically install LSPs and related tools to stdpath for Neovim
-    { 'williamboman/mason.nvim', config = true, opts = { ensure_installed = { 'prettier' } } }, -- NOTE: Must be loaded before dependants
-    'williamboman/mason-lspconfig.nvim',
+    { 'mason-org/mason.nvim', opts = {} },
+    'mason-org/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
 
     -- Useful status updates for LSP.
-    -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
     { 'j-hui/fidget.nvim', opts = {} },
 
-    -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
-    -- used for completion, annotations and signatures of Neovim apis
-    { 'folke/neodev.nvim', opts = {} },
+    -- Allows extra capabilities provided by blink.cmp
+    'saghen/blink.cmp',
   },
   config = function()
     --  This function gets run when an LSP attaches to a particular buffer.
@@ -117,7 +114,7 @@ return { -- LSP Configuration & Plugins
     capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
     local vue_ls_path = vim.fn.expand '$MASON/packages/vue-language-server/node_modules/@vue/language-server'
-    local tsserver_filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' }
+    -- local tsserver_filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' }
     local vue_plugin = {
       name = '@vue/typescript-plugin',
       location = vue_ls_path,
