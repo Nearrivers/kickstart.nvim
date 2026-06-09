@@ -1,6 +1,2 @@
-return {
-  'isak102/ghostty.nvim',
-  config = function()
-    require('ghostty').setup()
-  end,
-}
+vim.pack.add { "https://github.com/isak102/ghostty.nvim" }
+require('ghostty').setup{}
