@@ -7,6 +7,6 @@ return {
       transparent = true,
     }
 
-    vim.cmd 'colorscheme tokyonight'
+    -- vim.cmd 'colorscheme tokyonight'
   end,
 }
