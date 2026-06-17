@@ -13,7 +13,7 @@ do
   vim.g.maplocalleader = ' '
 
   -- Set to true if you have a Nerd Font installed and selected in the terminal
-  vim.g.have_nerd_font = false
+  vim.g.have_nerd_font = true
 
   -- Make line numbers default
   vim.o.number = true
@@ -383,6 +383,7 @@ do
     gh 'nvim-lua/plenary.nvim',
     gh 'nvim-telescope/telescope.nvim',
     gh 'nvim-telescope/telescope-ui-select.nvim',
+    gh 'nvim-telescope/telescope-symbols.nvim',
   }
   if vim.fn.executable 'make' == 1 then
     table.insert(telescope_plugins, gh 'nvim-telescope/telescope-fzf-native.nvim')
@@ -586,6 +587,7 @@ do
     --
     -- But for many setups, the LSP (`ts_ls`) will work just fine
     ts_ls = {},
+    tailwindcss = {},
 
     stylua = {}, -- Used to format Lua code
 
@@ -675,7 +677,7 @@ do
         javascriptreact = true,
         typescript = true,
         typescriptreact = true,
-        javascript = true
+        javascript = true,
       }
       if enabled_filetypes[vim.bo[bufnr].filetype] then
         return { timeout_ms = 500 }
@@ -723,7 +725,10 @@ do
   -- require('luasnip.loaders.from_vscode').lazy_load()
 
   -- [[ Autocomplete Engine ]]
-  vim.pack.add { { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' } }
+  -- vim.pack.add { { src = gh 'saghen/blink.cmp', version = vim.version.range '1.*' } }
+  vim.pack.add { gh 'saghen/blink.lib', gh 'saghen/blink.cmp', gh 'xzbdmw/colorful-menu.nvim' }
+  require('colorful-menu').setup()
+
   require('blink.cmp').setup {
     keymap = {
       -- 'default' (recommended) for mappings similar to built-in completions
@@ -747,9 +752,7 @@ do
       -- <c-k>: Toggle signature help
       --
       -- See `:help blink-cmp-config-keymap` for defining your own keymap
-      preset = 'default',
-      ['<C-y>'] = false, -- or {}
-      ['<CR>'] = { 'select_and_accept', 'fallback' },
+      preset = 'enter',
 
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -759,7 +762,6 @@ do
       -- Adjusts spacing to ensure icons are aligned
       nerd_font_variant = 'mono',
     },
-
     completion = {
       -- By default, you may press `<c-space>` to show the documentation.
       -- Optionally, set `auto_show = true` to show the documentation after a delay.
@@ -768,10 +770,30 @@ do
         enabled = true,
         show_with_selection = true,
       },
+      menu = {
+        auto_show = true,
+
+        -- nvim-cmp style menu
+        draw = {
+          -- We don't need label_description now because label and label_description are already
+          -- combined together in label by colorful-menu.nvim.
+          columns = { { 'kind_icon' }, { 'label', gap = 1 } },
+          components = {
+            label = {
+              text = function(ctx)
+                return require('colorful-menu').blink_components_text(ctx)
+              end,
+              highlight = function(ctx)
+                return require('colorful-menu').blink_components_highlight(ctx)
+              end,
+            },
+          },
+        },
+      },
     },
 
     sources = {
-      default = { 'lsp', 'path', 'snippets' },
+      default = { 'lsp', 'path', 'snippets', 'buffer' },
     },
 
     snippets = { preset = 'luasnip' },
@@ -783,7 +805,7 @@ do
     -- the rust implementation via `'prefer_rust_with_warning'`
     --
     -- See `:help blink-cmp-config-fuzzy` for more information
-    fuzzy = { implementation = 'lua' },
+    fuzzy = { implementation = 'rust' },
 
     -- Shows a signature help window while you type arguments for a function
     signature = { enabled = true },

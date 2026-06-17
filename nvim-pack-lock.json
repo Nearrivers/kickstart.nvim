@@ -11,12 +11,15 @@
     },
     "blink.cmp": {
       "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
-      "src": "https://github.com/saghen/blink.cmp",
-      "version": "1.0.0 - 2.0.0"
+      "src": "https://github.com/saghen/blink.cmp"
     },
     "blink.lib": {
       "rev": "b127d48bf8e9ac9cf41f6e0fbead317503f76558",
       "src": "https://github.com/saghen/blink.lib"
+    },
+    "colorful-menu.nvim": {
+      "rev": "13f9b7eaa9cd2901b4f8915cfb2483c3be4c8c20",
+      "src": "https://github.com/xzbdmw/colorful-menu.nvim"
     },
     "conform.nvim": {
       "rev": "dca1a190aa85f9065979ef35802fb77131911106",
@@ -168,6 +171,10 @@
       "rev": "b25b749b9db64d375d782094e2b9dce53ad53a40",
       "src": "https://github.com/nvim-telescope/telescope-fzf-native.nvim"
     },
+    "telescope-symbols.nvim": {
+      "rev": "a6d0127a53d39b9fc2af75bd169d288166118aec",
+      "src": "https://github.com/nvim-telescope/telescope-symbols.nvim"
+    },
     "telescope-ui-select.nvim": {
       "rev": "6e51d7da30bd139a6950adf2a47fda6df9fa06d2",
       "src": "https://github.com/nvim-telescope/telescope-ui-select.nvim"
@@ -177,7 +184,7 @@
       "src": "https://github.com/nvim-telescope/telescope.nvim"
     },
     "tiny-inline-diagnostic.nvim": {
-      "rev": "680762989e8b05a72e90769959d0fb9a557e6917",
+      "rev": "e930d0a46031645040d5492595b46cdf6ab3514f",
       "src": "https://github.com/rachartier/tiny-inline-diagnostic.nvim"
     },
     "todo-comments.nvim": {
@@ -193,7 +200,7 @@
       "src": "https://github.com/folke/which-key.nvim"
     },
     "yazi.nvim": {
-      "rev": "f01985801601b48c50633cd7a6dbe6b5b09c0ca5",
+      "rev": "d5baf80988404d011360b1316790a5d048776cdd",
       "src": "https://github.com/mikavilpas/yazi.nvim"
     }
   }

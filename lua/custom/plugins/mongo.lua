@@ -11,13 +11,12 @@ require('mongo').setup {
 
 vim.keymap.set('n', '<leader>dbl', function()
   vim.cmd "lua require('mongo-nvim.telescope.pickers').database_picker()"
-end, {desc = "List available databases"})
+end, { desc = 'List available databases' })
 
 vim.keymap.set('n', '<leader>dbcl', function()
   vim.cmd "lua require('mongo-nvim.telescope.pickers').database_picker()"
-end, {desc = "List collections in database (arg: database name)"})
+end, { desc = 'List collections in database (arg: database name)' })
 
 vim.keymap.set('n', '<leader>dbdl', function()
   vim.cmd "lua require('mongo-nvim.telescope.pickers').database_picker()"
-end, {desc = "List documents in a database's collection (arg: database name, collection name)"})
-
+end, { desc = "List documents in a database's collection (arg: database name, collection name)" })
